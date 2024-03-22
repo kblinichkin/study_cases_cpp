@@ -41,9 +41,11 @@ void TestTask::run() {
 		std::vector<uint8_t> data(10, 0);
 		auto bytesRead = m_i2cPort.slaveReadBuffer(data, 10);
 
-		ESP_LOGI(TAG, "bytesRead: %d", bytesRead);
-		for (size_t i = 0; i < data.size(); ++i) {
-			ESP_LOGI(TAG, "data[%d]: %d", i, data[i]);
+		if (bytesRead > 0) {
+			ESP_LOGI(TAG, "bytesRead: %d", bytesRead);
+			for (size_t i = 0; i < data.size(); ++i) {
+				ESP_LOGI(TAG, "data[%d]: %d", i, data[i]);
+			}
 		}
 
 		vTaskDelay(pdMS_TO_TICKS(500));

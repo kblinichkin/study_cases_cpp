@@ -21,7 +21,10 @@
 #define ACK_CHECK_DIS 0x0 /*!< I2C master will not check ack from slave */
 #define ACK_VAL 0x0       /*!< I2C ack value */
 #define NACK_VAL 0x1      /*!< I2C nack value */
-#define I2C_SLAVE_MAX_SPEED 100000
+#define I2C_SLAVE_MAX_SPEED_100kHz 100000
+#define I2C_SLAVE_MAX_SPEED_400kHz 400000
+#define I2C_SLAVE_MAX_SPEED_1MHz 1000000
+
 
 #define I2C_SLAVE_SDA_IO GPIO_NUM_18
 #define I2C_SLAVE_SCL_IO GPIO_NUM_23
@@ -35,13 +38,13 @@ I2CPort::I2CPort() {
 
 	i2c_config_t conf_slave;
 	conf_slave.sda_io_num = I2C_SLAVE_SDA_IO;            // select SDA GPIO specific to your project
-	conf_slave.sda_pullup_en = GPIO_PULLUP_ENABLE;
+	conf_slave.sda_pullup_en = GPIO_PULLUP_DISABLE;
 	conf_slave.scl_io_num = I2C_SLAVE_SCL_IO;            // select SCL GPIO specific to your project
-	conf_slave.scl_pullup_en = GPIO_PULLUP_ENABLE;
+	conf_slave.scl_pullup_en = GPIO_PULLUP_DISABLE;
 	conf_slave.mode = I2C_MODE_SLAVE;
 	conf_slave.slave.addr_10bit_en = 0;
 	conf_slave.slave.slave_addr = ESP_SLAVE_ADDR;       // slave address of your project
-	conf_slave.slave.maximum_speed = I2C_SLAVE_MAX_SPEED;
+	conf_slave.slave.maximum_speed = I2C_SLAVE_MAX_SPEED_1MHz;
 	conf_slave.clk_flags = 0;                            // optional; you can use I2C_SCLK_SRC_FLAG_* flags to choose I2C source clock here
 
 	ESP_ERROR_CHECK(i2c_param_config(i2c_slave_port, &conf_slave));

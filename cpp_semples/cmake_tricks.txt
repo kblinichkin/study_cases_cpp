@@ -1,0 +1,26 @@
+include(FetchContent)
+FetchContent_Declare(
+    cJSON
+    URL https://github.com/DaveGamble/cJSON/archive/refs/tags/v1.7.17.tar.gz # URL. Can be a github link as well. TAG in this case can be real tag and not only a hash
+    SOURCE_DIR ../dependancies/cjson # specifies where to download dependancies
+)
+FetchContent_Declare(
+    CURL
+    URL https://github.com/curl/curl/releases/download/curl-8_6_0/curl-8.6.0.tar.gz
+    SOURCE_DIR ../dependancies/curl
+)
+FetchContent_MakeAvailable(cJSON CURL)
+FetchContent_MakeAvailable(cJSON)
+
+add_library(cJSON STATIC IMPORTED)
+set_target_properties(cJSON PROPERTIES IMPORTED_LOCATION ${cJSON_BINARY_DIR}/librestbed.a) # variable containing binaries: libraries, execs etc.
+
+target_include_directories (ipa
+                          PRIVATE
+                          src/sgp
+                          src/network
+                          src/network/impl_specific
+                          ${cJSON_SOURCE_DIR}) # cJSON_SOURCE_DIR - variable containing sources and headers
+
+target_link_libraries(ipa PRIVATE cjson CURL::libcurl_shared)
+target_link_libraries(ipa PRIVATE cjson CURL::libcurl)
